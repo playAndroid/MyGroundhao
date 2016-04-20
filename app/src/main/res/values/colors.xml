@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="mycolors">
+        <item>@android:color/holo_blue_light</item>
+        <item>@android:color/holo_orange_light</item>
+        <item>@android:color/holo_red_light</item>
+        <item>@android:color/holo_green_light</item>
+        <item>@android:color/holo_blue_dark</item>
+    </integer-array>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="primary">#03A9F4</color>
+    <color name="actionbar_title">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
+    <color name="frg_list_text_color">#FFFFFF</color>
+    <color name="comment_bg">#FFFFFF</color>
+
+    <color name="title_color_wite">#ffffff</color>
+    <color name="title_color_gray">#666666</color>
+    <color name="content_color">#333333</color>
+
+</resources>

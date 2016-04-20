@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">groundhao</string>
+    <string name="action_settings">Settings</string>
+    <string name="first">first</string>
+    <string name="second">second</string>
+    <string name="app_error">app_error</string>
+    <string name="app_error_message">app_error_message</string>
+    <string name="submit_report">submit_report</string>
+
+    <string name="newsthing">新鲜事</string>
+    <string name="gril">妹子图</string>
+    <string name="joke">段子</string>
+    <string name="nothing">无聊图</string>
+    <string name="video">小视屏</string>
+    <string name="setting">设置</string>
+    <string name="action_share">设置</string>
+</resources>

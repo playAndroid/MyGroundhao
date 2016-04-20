@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    card:cardCornerRadius="5dp"
+    card:cardElevation="10dp">
+    <!--cardMaxElevation：最大卡片阴影的宽度-->
+    <!--cardElevation:卡片阴影的宽度-->
+    <!--cardBackgroundColor:卡片的背景颜色-->
+    <!--cardCornerRadius ：卡片的圆角半径-->
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="作者"
+                android:textSize="@dimen/frg_list_text_size" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="时间"
+                android:textSize="@dimen/frg_list_text_size" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_joke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:lineSpacingExtra="4dp"
+                android:paddingLeft="5dp"
+                android:text="OO"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_oo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:maxEms="10"
+                android:paddingLeft="5dp"
+                android:singleLine="true"
+                android:text="OO"
+                android:textColor="@color/title_color_gray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_xx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@+id/tv_oo"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:text="XX"
+                android:textColor="@color/title_color_gray"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_speck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_toRightOf="@+id/tv_xx"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:text="吐槽"
+                android:textColor="@color/title_color_gray"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_more_horiz_grey600_24dp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

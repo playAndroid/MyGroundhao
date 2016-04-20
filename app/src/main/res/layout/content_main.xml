@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.MainActivity"
+    tools:showIn="@layout/activity_main">
+    <include layout="@layout/content_toolbar" />
+    <blog.groundhao.com.mygroundhao.view.CustomWebView
+        android:id="@+id/wv_webview_content_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></blog.groundhao.com.mygroundhao.view.CustomWebView>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/ll_loading"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#fff"-->
+        <!--android:gravity="center"-->
+        <!--android:orientation="vertical">-->
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/pb_progress"-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="60dp" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/tv_loading_text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="正在加载." />-->
+    <!--</LinearLayout>-->
+
+
+</RelativeLayout>
