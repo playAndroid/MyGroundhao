@@ -25,6 +25,7 @@ import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -211,12 +212,14 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                     public void onResponse(String response) {
                         ArrayList<ResponseInfo> commentNumbers = new ArrayList<>();
                         try {
-                            JSONObject jsonObject = new JSONObject(response).getJSONObject("response");
+                            JSONObject jsonObject = null;
+                            jsonObject = new JSONObject(response).getJSONObject("response");
                             String s = sb.toString();
 
                             String[] split = s.split("\\,");
                             Logger.e("截取内容" + s + "截取长度:" + split.length);
                             for (String comment_ID : split) {
+
                                 if (!jsonObject.isNull(comment_ID)) {
                                     ResponseInfo callback = new ResponseInfo();
                                     callback.setComments(jsonObject.getJSONObject(comment_ID).getInt(ResponseInfo.COMMENTS));
@@ -228,8 +231,10 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                                     commentNumbers.add(new ResponseInfo("0", "0", 0));
                                 }
                             }
-                        } catch (Exception e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
+//                                AppManager.getInstance().exitApp(context);
+                            Logger.e("---------------------->" + "JSon解析出错");
                         }
                         Logger.e("添加长度:" + comments.size() + "commentNumbers长度" + commentNumbers.size());
                         for (int i = 0; i < comments.size(); i++) {
@@ -245,9 +250,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                             loadSuccessListener.onSuccessListener();
                         }
                     }
-                }
-
-        );
+                });
     }
 
     public void setLoadFinishListener(LoadFinishListener loadFinishListener) {

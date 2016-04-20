@@ -1,5 +1,6 @@
 package blog.groundhao.com.mygroundhao.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 import blog.groundhao.com.mygroundhao.R;
 import blog.groundhao.com.mygroundhao.model.NewsThingInfo;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
+import blog.groundhao.com.mygroundhao.ui.itemactivity.CommentCountAcitivity;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.TimeUtils;
 import butterknife.Bind;
@@ -181,6 +183,9 @@ public class NewsthingDetailFragment extends BaseFragment {
         switch (itemId) {
             case R.id.action_chat:
                 //跳转吐槽页
+                Intent intent = new Intent(getActivity(), CommentCountAcitivity.class);
+                intent.putExtra(DATA_NEWSTHING, postsBean);
+                getActivity().startActivity(intent);
                 break;
             case R.id.action_share:
                 //分享 文字

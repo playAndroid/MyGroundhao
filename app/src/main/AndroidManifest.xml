@@ -39,10 +39,15 @@
         <activity
             android:name=".ui.itemactivity.NewsThingDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/FreshNewsDetailActivityTheme" />
         <activity
             android:name=".ui.itemactivity.PictureDetailActivity"
-            android:theme="@style/ImageDetailActivityTheme"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageDetailActivityTheme" />
+        <activity
+            android:name=".ui.itemactivity.CommentCountAcitivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
     </application>
