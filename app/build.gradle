@@ -8,8 +8,8 @@ android {
         applicationId "blog.groundhao.com.mygroundhao"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 3
-        versionName "1.2"
+        versionCode 8
+        versionName "1.4"
     }
     buildTypes {
         release {

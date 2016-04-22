@@ -6,4 +6,6 @@ package blog.groundhao.com.mygroundhao.engine;
 public interface CommonString {
     String DATA_NEWSTHING = "newsthings";
     String DATA_NEWS_POSITION = "position";
+    String IS_FROM_NEWSTHING = "isFromNewsthing";
+    String DATA_PICTURE = "picture_detail";
 }

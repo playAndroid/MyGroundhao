@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class PostsBean implements Serializable {
 
-    private int id;
+    private String id;
     private String url;
     private String title;
     private String date;
@@ -36,11 +36,11 @@ public class PostsBean implements Serializable {
 
     private List<TagsBean> tags;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

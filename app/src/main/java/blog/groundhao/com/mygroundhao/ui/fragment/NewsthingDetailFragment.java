@@ -83,9 +83,9 @@ public class NewsthingDetailFragment extends BaseFragment {
                 }
             }
         });
-        Logger.e("url:" + NewsThingInfo.getUrlFreshNewsDetail(postsBean.getId() + ""));
+        Logger.e("url:" + NewsThingInfo.getUrlFreshNewsDetail(postsBean.getId()));
 
-        OkHttpUtils.get().url(NewsThingInfo.getUrlFreshNewsDetail(postsBean.getId() + "")).build().execute(new StringCallback() {
+        OkHttpUtils.get().url(NewsThingInfo.getUrlFreshNewsDetail(postsBean.getId())).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e) {
 
@@ -185,6 +185,7 @@ public class NewsthingDetailFragment extends BaseFragment {
                 //跳转吐槽页
                 Intent intent = new Intent(getActivity(), CommentCountAcitivity.class);
                 intent.putExtra(DATA_NEWSTHING, postsBean);
+                intent.putExtra(IS_FROM_NEWSTHING, true);
                 getActivity().startActivity(intent);
                 break;
             case R.id.action_share:

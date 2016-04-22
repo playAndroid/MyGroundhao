@@ -1,5 +1,6 @@
 package blog.groundhao.com.mygroundhao.ui.itemactivity;
 
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class PictureDetailActivity extends BestActivity {
     public static final int ANIMATION_DURATION = 500;
     boolean isHide = false;
     private ControllerListener<ImageInfo> controllerListener;
+    private Comments comments;
     //    @Override
 //    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
 //        super.onCreate(savedInstanceState, persistentState);
@@ -104,6 +106,9 @@ public class PictureDetailActivity extends BestActivity {
             @Override
             public void onClick(View v) {
                 ShowToastUtils.Short("吐槽");
+                Intent intent = new Intent(PictureDetailActivity.this,CommentCountAcitivity.class);
+                intent.putExtra(DATA_PICTURE,comments.getComment_ID());
+                startActivity(intent);
             }
         });
         img_download.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +123,7 @@ public class PictureDetailActivity extends BestActivity {
 
     private void initData() {
         registerControllerListener();
-        Comments comments = (Comments) getIntent().getSerializableExtra(DATA_NEWSTHING);
+        comments = (Comments) getIntent().getSerializableExtra(DATA_NEWSTHING);
         Logger.e("进入图片详情页" + comments.getComment_author());
         String stringUrl = comments.getPics()[0];
         Uri uri = Uri.parse(stringUrl);
