@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
-import blog.groundhao.com.mygroundhao.callback.Commentable;
-
 /**
  * Created by user on 2016/4/20.
  */
-public class CommentNewsthingInfo extends Commentator implements Commentable {
+public class CommentNewsthingInfo extends Commentator {
     //评论列表
     public static final String URL_COMMENTS = "http://jandan.net/?oxwlxojflwblxbsapi=get_post&include=comments&id=";
     //对新鲜事发表评论

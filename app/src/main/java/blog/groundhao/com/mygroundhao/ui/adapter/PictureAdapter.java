@@ -38,6 +38,7 @@ import blog.groundhao.com.mygroundhao.engine.CommonString;
 import blog.groundhao.com.mygroundhao.model.Comments;
 import blog.groundhao.com.mygroundhao.model.NoThingInfo;
 import blog.groundhao.com.mygroundhao.model.ResponseInfo;
+import blog.groundhao.com.mygroundhao.ui.itemactivity.CommentCountAcitivity;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.PictureDetailActivity;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
@@ -140,6 +141,16 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                 //跳转图片详情页
                 Intent intent = new Intent(context, PictureDetailActivity.class);
                 intent.putExtra(DATA_NEWSTHING, comments);
+                context.startActivity(intent);
+            }
+        });
+
+        holder.tv_speck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommentCountAcitivity.class);
+                intent.putExtra(THEARD_KEY, "comment-" + comments.getComment_ID());
+                intent.putExtra(IS_FROM_NEWSTHING, false);
                 context.startActivity(intent);
             }
         });

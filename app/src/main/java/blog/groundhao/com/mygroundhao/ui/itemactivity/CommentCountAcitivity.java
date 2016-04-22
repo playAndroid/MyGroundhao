@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -14,6 +15,7 @@ import blog.groundhao.com.mygroundhao.callback.LoadFinishListener;
 import blog.groundhao.com.mygroundhao.engine.uibest.BestActivity;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.ui.adapter.CommentCountAdapter;
+import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
@@ -43,17 +45,23 @@ public class CommentCountAcitivity extends BestActivity implements LoadFinishLis
 
     private void initData() {
         PostsBean postsBean = (PostsBean) getIntent().getSerializableExtra(DATA_NEWSTHING);
-        String thread_key = getIntent().getStringExtra(DATA_PICTURE);
+        String thread_key = getIntent().getStringExtra(THEARD_KEY);
         isFromNewsThing = getIntent().getBooleanExtra(IS_FROM_NEWSTHING, true);
-        String id = postsBean.getId();
+
         if (isFromNewsThing) {
+            String id = postsBean.getId();
             commentCountAdapter = new CommentCountAdapter(this, id, isFromNewsThing);
         } else {
             commentCountAdapter = new CommentCountAdapter(this, thread_key, isFromNewsThing);
         }
         recyclerView.setAdapter(commentCountAdapter);
         commentCountAdapter.setLoadFinishListener(this);
-        commentCountAdapter.load4Newsthing();
+        if (isFromNewsThing) {
+            commentCountAdapter.load4Newsthing();
+        } else {
+            commentCountAdapter.loadDataFrom();
+        }
+
     }
 
     private void initView() {
@@ -79,10 +87,21 @@ public class CommentCountAcitivity extends BestActivity implements LoadFinishLis
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_comment_list, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
             finish();
+            return true;
+        }
+
+        if (itemId == R.id.action_edit) {
+            ShowToastUtils.Short("编辑");
             return true;
         }
         return super.onOptionsItemSelected(item);

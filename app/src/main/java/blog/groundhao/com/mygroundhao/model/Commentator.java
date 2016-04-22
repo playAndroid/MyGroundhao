@@ -5,10 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import blog.groundhao.com.mygroundhao.view.floorview.Commentable;
+
 /**
  * Created by user on 2016/4/20.
  */
-public class Commentator implements Comparable {
+public class Commentator implements Comparable ,Commentable {
     //评论列表
     public static final String URL_COMMENT_LIST = "http://jandan.duoshuo.com/api/threads/listPosts.json?thread_key=";
     //发表评论
@@ -159,18 +161,18 @@ public class Commentator implements Comparable {
         this.post_id = post_id;
     }
 
-//    @Override
-//    public int getCommentFloorNum() {
-//        return getFloorNum();
-//    }
-//
-//    @Override
-//    public String getCommentContent() {
-//        return getMessage();
-//    }
-//
-//    @Override
-//    public String getAuthorName() {
-//        return getName();
-//    }
+    @Override
+    public int getCommentFloorNum() {
+        return 0;
+    }
+
+    @Override
+    public String getCommentContent() {
+        return null;
+    }
+
+    @Override
+    public String getAuthorName() {
+        return null;
+    }
 }

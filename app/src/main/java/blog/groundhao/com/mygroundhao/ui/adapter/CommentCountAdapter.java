@@ -33,6 +33,9 @@ import blog.groundhao.com.mygroundhao.model.Commentator;
 import blog.groundhao.com.mygroundhao.utils.JSONParser;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
 import blog.groundhao.com.mygroundhao.utils.TimeUtils;
+import blog.groundhao.com.mygroundhao.view.floorview.FloorView;
+import blog.groundhao.com.mygroundhao.view.floorview.SubComments;
+import blog.groundhao.com.mygroundhao.view.floorview.SubFloorFactory;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -64,10 +67,8 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
             case Commentator.TYPE_HOT:
             case Commentator.TYPE_NEW:
                 return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_comment_flag, parent, false));
-
             case Commentator.TYPE_NORMAL:
                 return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_comments_list, parent, false));
-
             default:
                 return null;
         }
@@ -86,16 +87,36 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
                 holder.tv_flag.setText("最新评论");
                 break;
             case Commentator.TYPE_NORMAL:
+                holder.tv_name.setText(commentNewsthingInfo.getName());
+
+
                 if (isFromNewsThing) {
                     String url = commentNewsthingInfo.getUrl();
                     Uri uri = Uri.parse(url);
                     holder.image_icon.setImageURI(uri);
-                    holder.tv_name.setText(commentNewsthingInfo.getName());
                     holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(commentNewsthingInfo.getDate()));
                     holder.tv_content.setText(getOnlyContent(commentNewsthingInfo.getContent()));
                 } else {
 
                 }
+
+                if (commentNewsthingInfo.getFloorNum() > 1) {
+                    SubComments subComments;
+//                    if (isFromNewsThing) {
+                    subComments = new SubComments(commentNewsthingInfo.getParentComments());
+//                    } else {
+//
+//                    }
+
+                    holder.floorView.setComments(subComments);
+                    holder.floorView.setFactory(new SubFloorFactory());
+                    holder.floorView.setBoundDrawer(context.getResources().getDrawable(
+                            R.drawable.bg_comment));
+                    holder.floorView.init();
+                } else {
+                    holder.floorView.setVisibility(View.GONE);
+                }
+
 
                 break;
         }
@@ -124,7 +145,18 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
 
 
     public void loadDataFrom() {
+        Logger.e("url-----loadDataFrom:" + Commentator.getUrlCommentList(id));
+        OkHttpUtils.get().url(Commentator.getUrlCommentList(id)).build().execute(new StringCallback() {
+            @Override
+            public void onError(Call call, Exception e) {
 
+            }
+
+            @Override
+            public void onResponse(String response) {
+
+            }
+        });
     }
 
     public void load4Newsthing() {
@@ -144,41 +176,45 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
                 if (dataFromServer == null) {
                     return;
                 } else {
-                    commentsList.clear();
-                    if (dataFromServer.size() > 6) {
-                        CommentNewsthingInfo commentNewsthingInfo = new CommentNewsthingInfo();
-                        commentNewsthingInfo.setType(Commentator.TYPE_HOT);
-                        commentsList.add(commentNewsthingInfo);
-                        Collections.sort(dataFromServer, new Comparator<CommentNewsthingInfo>() {
-                            @Override
-                            public int compare(CommentNewsthingInfo lhs, CommentNewsthingInfo rhs) {
-                                return lhs.getVote_positive() >= rhs.getVote_positive() ? 1 : -1;
+                    if (dataFromServer.size() == 0) {
+                        ShowToastUtils.Short("暂无评论");
+                    } else {
+                        commentsList.clear();
+                        if (dataFromServer.size() > 6) {
+                            CommentNewsthingInfo commentNewsthingInfo = new CommentNewsthingInfo();
+                            commentNewsthingInfo.setType(Commentator.TYPE_HOT);
+                            commentsList.add(commentNewsthingInfo);
+                            Collections.sort(dataFromServer, new Comparator<CommentNewsthingInfo>() {
+                                @Override
+                                public int compare(CommentNewsthingInfo lhs, CommentNewsthingInfo rhs) {
+                                    return lhs.getVote_positive() <= rhs.getVote_positive() ? 1 : -1;
+                                }
+                            });
+                            List<CommentNewsthingInfo> subList = dataFromServer.subList(0, 6);
+                            for (CommentNewsthingInfo info : subList) {
+                                info.setTag(info.TAG_HOT);
                             }
-                        });
-                        List<CommentNewsthingInfo> subList = dataFromServer.subList(0, 6);
-                        for (CommentNewsthingInfo info : subList) {
-                            info.setTag(info.TAG_HOT);
+                            commentsList.addAll(subList);
                         }
-                        commentsList.addAll(subList);
-                    }
 
-                    CommentNewsthingInfo newsthingInfo = new CommentNewsthingInfo();
-                    newsthingInfo.setType(newsthingInfo.TYPE_NEW);
-                    commentsList.add(newsthingInfo);
+                        CommentNewsthingInfo newsthingInfo = new CommentNewsthingInfo();
+                        newsthingInfo.setType(newsthingInfo.TYPE_NEW);
+                        commentsList.add(newsthingInfo);
 
-                    Collections.sort(dataFromServer);
-                    for (CommentNewsthingInfo infos : dataFromServer) {
-                        if (infos.getTag().contains(infos.TAG_NORMAL)) {
-                            commentsList.add(infos);
+                        Collections.sort(dataFromServer);
+                        for (CommentNewsthingInfo infos : dataFromServer) {
+                            if (infos.getTag().equals(infos.TAG_NORMAL)) {
+                                commentsList.add(infos);
+                            }
                         }
-                    }
 
-                    notifyDataSetChanged();
-                    if (loadFinishListener != null) {
-                        loadFinishListener.finishDataFormServer();
-                    }
-                    if (loadingSuccessListener != null) {
-                        loadingSuccessListener.onSuccessListener();
+                        notifyDataSetChanged();
+                        if (loadFinishListener != null) {
+                            loadFinishListener.finishDataFormServer();
+                        }
+                        if (loadingSuccessListener != null) {
+                            loadingSuccessListener.onSuccessListener();
+                        }
                     }
                 }
             }
@@ -209,7 +245,6 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
                         info.setParentComments(tempCommentList);
                         info.setFloorNum(tempCommentList.size() + 1);
                         info.setContent(getContentParent(info.getContent()));
-
                     } else {
                         info.setContent(getContentParent(info.getContent()));
                     }
@@ -229,7 +264,7 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
                                ArrayList<CommentNewsthingInfo> parentComments,
                                int parentId) {
         for (CommentNewsthingInfo commentNewsthingInfo : parentComments) {
-            if (commentNewsthingInfo.getParentId() != parentId) continue;
+            if (commentNewsthingInfo.getId() != parentId) continue;
             //有父评论
             tempCommentList.add(commentNewsthingInfo);
             if (commentNewsthingInfo.getParentId() != 0 && commentNewsthingInfo.getParentComments() != null) {
@@ -243,7 +278,7 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
 
     private String getContentParent(String content) {
         if (content.contains("</a>:")) {
-            return getOnlyContent(content);
+            return getOnlyContent(content).split("</a>:")[1];
         }
         return content;
     }
@@ -281,11 +316,14 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
         @Nullable
         @Bind(R.id.tv_hot)
         TextView tv_flag;
+        @Nullable
+        @Bind(R.id.floors_parent)
+        FloorView floorView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-//            setIsRecyclable(false);
+            setIsRecyclable(false);//不复用
         }
     }
 }

@@ -8,4 +8,5 @@ public interface CommonString {
     String DATA_NEWS_POSITION = "position";
     String IS_FROM_NEWSTHING = "isFromNewsthing";
     String DATA_PICTURE = "picture_detail";
+    String THEARD_KEY = "theard_key";
 }

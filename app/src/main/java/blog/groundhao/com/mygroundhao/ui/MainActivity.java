@@ -97,7 +97,7 @@ public class MainActivity extends BestActivity {
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
                     startActivity(intent);
                 }
             });

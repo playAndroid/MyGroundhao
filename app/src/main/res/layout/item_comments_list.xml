@@ -50,13 +50,21 @@
                 android:textSize="@dimen/listitem_textsize" />
         </LinearLayout>
 
+        <blog.groundhao.com.mygroundhao.view.floorview.FloorView
+            android:id="@+id/floors_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_floor" />
+
         <TextView
-            android:layout_marginTop="4dp"
             android:id="@+id/tv_content"
             android:layout_width="match_parent"
-            android:lineSpacingExtra="4dp"
-            android:gravity="center_vertical"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="4dp"
             android:textColor="@color/title_light"
             android:textSize="@dimen/button_textsize" />
 
