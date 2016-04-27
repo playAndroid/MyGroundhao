@@ -12,6 +12,7 @@ import android.view.View;
 
 import blog.groundhao.com.mygroundhao.R;
 import blog.groundhao.com.mygroundhao.callback.LoadFinishListener;
+import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
 import blog.groundhao.com.mygroundhao.engine.uibest.BestActivity;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.ui.adapter.CommentCountAdapter;
@@ -23,7 +24,7 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 /**
  * Created by user on 2016/4/20.
  */
-public class CommentCountAcitivity extends BestActivity implements LoadFinishListener {
+public class CommentCountAcitivity extends BestActivity implements LoadFinishListener, LoadingSuccessListener {
     @Bind(R.id.toolbar)
     Toolbar toolbar;
     @Bind(R.id.swipe_view)
@@ -46,7 +47,7 @@ public class CommentCountAcitivity extends BestActivity implements LoadFinishLis
     private void initData() {
         PostsBean postsBean = (PostsBean) getIntent().getSerializableExtra(DATA_NEWSTHING);
         String thread_key = getIntent().getStringExtra(THEARD_KEY);
-        isFromNewsThing = getIntent().getBooleanExtra(IS_FROM_NEWSTHING, true);
+        isFromNewsThing = getIntent().getBooleanExtra(IS_FROM_NEWSTHING, false);
 
         if (isFromNewsThing) {
             String id = postsBean.getId();
@@ -56,6 +57,7 @@ public class CommentCountAcitivity extends BestActivity implements LoadFinishLis
         }
         recyclerView.setAdapter(commentCountAdapter);
         commentCountAdapter.setLoadFinishListener(this);
+        commentCountAdapter.setLoadingSuccessListener(this);
         if (isFromNewsThing) {
             commentCountAdapter.load4Newsthing();
         } else {
@@ -77,7 +79,11 @@ public class CommentCountAcitivity extends BestActivity implements LoadFinishLis
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                commentCountAdapter.load4Newsthing();
+                if (isFromNewsThing) {
+                    commentCountAdapter.load4Newsthing();
+                } else {
+                    commentCountAdapter.loadDataFrom();
+                }
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -113,5 +119,22 @@ public class CommentCountAcitivity extends BestActivity implements LoadFinishLis
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void onSuccessListener() {
+        loading.setVisibility(View.GONE);
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void onFaliListener() {
+        loading.setVisibility(View.GONE);
+        if (swipeRefreshLayout.isRefreshing()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        ShowToastUtils.Short("加载失败");
     }
 }

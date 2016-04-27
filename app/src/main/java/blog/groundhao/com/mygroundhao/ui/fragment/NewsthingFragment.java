@@ -82,10 +82,10 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
         loading.setVisibility(View.VISIBLE);
         loading.buildLayer();
     }
-
+    Boolean isScrolling = false;
     private void registerListener() {
         recycler_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            Boolean isScrolling = false;
+
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -96,7 +96,7 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                isScrolling = (dy > 0);
+//                isScrolling = (dy > 0);
                 int itemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
                 int itemCount = linearLayoutManager.getItemCount();
                 if (isScrolling && itemPosition >= itemCount - 3) {
@@ -128,6 +128,8 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
 
     @Override
     public void finishDataFormServer() {
+        isScrolling = true;
+        loading.setVisibility(View.GONE);
         if (swipe_view.isRefreshing()) {
             swipe_view.setRefreshing(false);
         }
@@ -135,6 +137,7 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
 
     @Override
     public void onSuccessListener() {
+        isScrolling = true;
         loading.setVisibility(View.GONE);
         if (swipe_view.isRefreshing()) {
             swipe_view.setRefreshing(false);
@@ -143,6 +146,7 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
 
     @Override
     public void onFaliListener() {
+        isScrolling = false;
         loading.setVisibility(View.GONE);
         if (swipe_view.isRefreshing()) {
             swipe_view.setRefreshing(false);

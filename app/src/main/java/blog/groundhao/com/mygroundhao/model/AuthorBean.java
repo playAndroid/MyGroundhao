@@ -1,5 +1,7 @@
 package blog.groundhao.com.mygroundhao.model;
 
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,24 @@ public class AuthorBean implements Serializable{
         private String nickname;
         private String url;
         private String description;
+
+    public static AuthorBean parse(final JSONObject jsonObject) {
+        AuthorBean author;
+        if (jsonObject == null) {
+            author = null;
+        } else {
+            author = new AuthorBean();
+            author.id = jsonObject.optInt("id");
+            author.slug = jsonObject.optString("slug");
+            author.name = jsonObject.optString("name");
+            author.first_name = jsonObject.optString("first_name");
+            author.last_name = jsonObject.optString("last_name");
+            author.nickname = jsonObject.optString("nickname");
+            author.url = jsonObject.optString("url");
+            author.description = jsonObject.optString("description");
+        }
+        return author;
+    }
 
         public int getId() {
             return id;

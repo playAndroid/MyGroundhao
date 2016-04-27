@@ -2,6 +2,7 @@ package blog.groundhao.com.mygroundhao.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,9 +23,11 @@ import java.util.List;
 import blog.groundhao.com.mygroundhao.R;
 import blog.groundhao.com.mygroundhao.callback.LoadFinishListener;
 import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
+import blog.groundhao.com.mygroundhao.engine.CommonString;
 import blog.groundhao.com.mygroundhao.model.Comments;
 import blog.groundhao.com.mygroundhao.model.JokeInfo;
 import blog.groundhao.com.mygroundhao.model.ResponseInfo;
+import blog.groundhao.com.mygroundhao.ui.itemactivity.CommentCountAcitivity;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
@@ -37,7 +40,7 @@ import okhttp3.Call;
  * 段子
  * Created by user on 2016/4/14.
  */
-public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
+public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> implements CommonString {
 
 
     private final Context context;
@@ -69,7 +72,15 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
         holder.img_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShareUtils.shareText((Activity) context,"段子分享:"+comments.getComment_content());
+                ShareUtils.shareText((Activity) context, "段子分享:" + comments.getComment_content());
+            }
+        });
+        holder.tv_speck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommentCountAcitivity.class);
+                intent.putExtra(THEARD_KEY, "comment-" + comments.getComment_ID());
+                context.startActivity(intent);
             }
         });
     }
@@ -92,7 +103,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
 
     private void loadDataFromServer() {
         if (NetWorkUtils.isNetWorkConnected(context)) {
-//            Logger.e("url:" + JokeInfo.URL_JOKE + page);
             OkHttpUtils.get().url(JokeInfo.URL_JOKE + page).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e) {
@@ -103,7 +113,6 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
 
                 @Override
                 public void onResponse(String response) {
-//                    Logger.e("response:" + response);
                     JokeInfo jokeInfo = new Gson().fromJson(response, JokeInfo.class);
                     getCountComment(jokeInfo);
                 }
@@ -128,7 +137,9 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
                 new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
-
+                        if (loadSuccessListener != null) {
+                            loadSuccessListener.onFaliListener();
+                        }
                     }
 
                     @Override
@@ -153,6 +164,10 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.ViewHolder> {
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            if (loadSuccessListener != null) {
+                                loadSuccessListener.onFaliListener();
+                            }
+                            return;
                         }
                         for (int i = 0; i < comments.size(); i++) {
                             comments.get(i).setCommentCount(commentNumbers.get(i).getComments());

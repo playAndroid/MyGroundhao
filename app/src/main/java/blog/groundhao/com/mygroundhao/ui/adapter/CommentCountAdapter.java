@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -41,6 +43,7 @@ import butterknife.ButterKnife;
 import okhttp3.Call;
 
 /**
+ * 评论适配器
  * Created by user on 2016/4/20.
  */
 public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapter.ViewHolder> {
@@ -49,6 +52,7 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
     private final Context context;
     private final String id;
     private final boolean isFromNewsThing;
+    ArrayList<Commentator> commentatorArrayList;
     ArrayList<CommentNewsthingInfo> commentsList;
     private LoadFinishListener loadFinishListener;
     private LoadingSuccessListener loadingSuccessListener;
@@ -57,7 +61,11 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
         this.context = context;
         this.id = id;
         this.isFromNewsThing = isFromNewsThing;
-        commentsList = new ArrayList<>();
+        if (isFromNewsThing) {
+            commentsList = new ArrayList<>();
+        } else {
+            commentatorArrayList = new ArrayList<>();
+        }
     }
 
 
@@ -78,35 +86,48 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
 
     @Override
     public void onBindViewHolder(CommentCountAdapter.ViewHolder holder, int position) {
-        CommentNewsthingInfo commentNewsthingInfo = commentsList.get(position);
-        switch (commentNewsthingInfo.getType()) {
-            case CommentNewsthingInfo.TYPE_HOT:
+        Commentator commentator;
+
+        if (isFromNewsThing) {
+            commentator = commentsList.get(position);
+        } else {
+            commentator = commentatorArrayList.get(position);
+        }
+
+
+        switch (commentator.getType()) {
+            case Commentator.TYPE_HOT:
                 holder.tv_flag.setText("热门评论");
                 break;
-            case CommentNewsthingInfo.TYPE_NEW:
+            case Commentator.TYPE_NEW:
                 holder.tv_flag.setText("最新评论");
                 break;
             case Commentator.TYPE_NORMAL:
-                holder.tv_name.setText(commentNewsthingInfo.getName());
-
 
                 if (isFromNewsThing) {
-                    String url = commentNewsthingInfo.getUrl();
+                    CommentNewsthingInfo info = (CommentNewsthingInfo) commentator;
+                    String url = info.getUrl();
+                    holder.tv_name.setText(info.getName());
                     Uri uri = Uri.parse(url);
                     holder.image_icon.setImageURI(uri);
-                    holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(commentNewsthingInfo.getDate()));
-                    holder.tv_content.setText(getOnlyContent(commentNewsthingInfo.getContent()));
+                    holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(info.getDate()));
+                    holder.tv_content.setText(getOnlyContent(info.getContent()));
                 } else {
-
+                    Uri uri = Uri.parse(commentator.getAvatar_url());
+                    String timeString = commentator.getCreated_at().replace("T", " ");
+                    timeString = timeString.substring(0, timeString.indexOf("+"));
+                    holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(timeString));
+                    holder.tv_content.setText(getOnlyContent(commentator.getMessage()));
+                    holder.image_icon.setImageURI(uri);
                 }
 
-                if (commentNewsthingInfo.getFloorNum() > 1) {
+                if (commentator.getFloorNum() > 1) {
                     SubComments subComments;
-//                    if (isFromNewsThing) {
-                    subComments = new SubComments(commentNewsthingInfo.getParentComments());
-//                    } else {
-//
-//                    }
+                    if (isFromNewsThing) {
+                        subComments = new SubComments(addFloors4FreshNews((CommentNewsthingInfo) commentator));
+                    } else {
+                        subComments = new SubComments(addFloors(commentator));
+                    }
 
                     holder.floorView.setComments(subComments);
                     holder.floorView.setFactory(new SubFloorFactory());
@@ -122,6 +143,28 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
         }
     }
 
+    private List<CommentNewsthingInfo> addFloors4FreshNews(CommentNewsthingInfo commentor) {
+        return commentor.getParentComments();
+    }
+
+    private List<Commentator> addFloors(Commentator commentator) {
+        //只有一层返回
+        if (commentator.getFloorNum() == 1) {
+            return null;
+        }
+        List<String> parents = Arrays.asList(commentator.getParents());
+        ArrayList<Commentator> commentators = new ArrayList<>();
+
+        for (Commentator comm : this.commentatorArrayList) {
+            if (parents.contains(comm.getPost_id())) {
+                commentators.add(comm);
+            }
+        }
+        Collections.reverse(commentators);
+        return commentators;
+
+    }
+
 
     public void setLoadFinishListener(LoadFinishListener loadFinishListener) {
         this.loadFinishListener = loadFinishListener;
@@ -134,13 +177,21 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
 
     @Override
     public int getItemViewType(int position) {
-
-        return commentsList.get(position).getType();
+        if (isFromNewsThing) {
+            return commentsList.get(position).getType();
+        } else {
+            return commentatorArrayList.get(position).getType();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return commentsList.size();
+        if (isFromNewsThing) {
+            return commentsList.size();
+        } else {
+            return commentatorArrayList.size();
+        }
+
     }
 
 
@@ -149,12 +200,64 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
         OkHttpUtils.get().url(Commentator.getUrlCommentList(id)).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e) {
-
+                if (loadingSuccessListener != null) {
+                    loadingSuccessListener.onFaliListener();
+                }
             }
 
             @Override
             public void onResponse(String response) {
+                ArrayList<Commentator> list = getDataLoadPicutre(response);
+                if (list == null) {
+                    if (loadingSuccessListener != null) {
+                        loadingSuccessListener.onSuccessListener();
+                        ShowToastUtils.Short("暂无评论");
+                    }
+                    return;
+                } else {
+                    if (list.size() == 0) {
+                        ShowToastUtils.Short("暂无评论");
+                    } else {
+                        commentatorArrayList.clear();
+                        ArrayList<Commentator> hotCommentator = new ArrayList<>();
+                        ArrayList<Commentator> normalComment = new ArrayList<>();
 
+                        //添加热门评论
+                        for (Commentator commentator : list) {
+                            if (commentator.getTag().equals(Commentator.TAG_HOT)) {
+                                hotCommentator.add(commentator);
+                            } else {
+                                normalComment.add(commentator);
+                            }
+                        }
+
+                        //添加热门评论title
+                        if (hotCommentator.size() != 0) {
+                            Collections.sort(hotCommentator);
+                            Commentator commentatorFlag = new Commentator();
+                            commentatorFlag.setType(Commentator.TYPE_HOT);
+                            hotCommentator.add(0, commentatorFlag);
+                            commentatorArrayList.addAll(hotCommentator);
+                        }
+
+                        //添加最新评论及标签
+                        if (normalComment.size() != 0) {
+                            Commentator newCommentFlag = new Commentator();
+                            newCommentFlag.setType(Commentator.TYPE_NEW);
+                            commentatorArrayList.add(newCommentFlag);
+                            Collections.sort(normalComment);
+                            commentatorArrayList.addAll(normalComment);
+                        }
+
+                        notifyDataSetChanged();
+                        if (loadFinishListener != null) {
+                            loadFinishListener.finishDataFormServer();
+                        }
+                        if (loadingSuccessListener != null) {
+                            loadingSuccessListener.onSuccessListener();
+                        }
+                    }
+                }
             }
         });
     }
@@ -174,9 +277,15 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
 
                 ArrayList<CommentNewsthingInfo> dataFromServer = getDataFromServer(response);
                 if (dataFromServer == null) {
+                    if (loadingSuccessListener != null) {
+                        loadingSuccessListener.onSuccessListener();
+                    }
                     return;
                 } else {
                     if (dataFromServer.size() == 0) {
+                        if (loadingSuccessListener != null) {
+                            loadingSuccessListener.onSuccessListener();
+                        }
                         ShowToastUtils.Short("暂无评论");
                     } else {
                         commentsList.clear();
@@ -215,7 +324,9 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
                         if (loadingSuccessListener != null) {
                             loadingSuccessListener.onSuccessListener();
                         }
+
                     }
+
                 }
             }
         });
@@ -296,6 +407,65 @@ public class CommentCountAdapter extends RecyclerView.Adapter<CommentCountAdapte
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+        }
+
+    }
+
+    public ArrayList<Commentator> getDataLoadPicutre(String response) {
+        try {
+            JSONObject resultJson = new JSONObject(response);
+            String allThreadId = resultJson.getString("response").replace("[", "").replace
+                    ("]", "").replace("\"", "");
+            Logger.e("=======================>" + response);
+            String[] threadIds = allThreadId.split("\\,");
+            if (TextUtils.isEmpty(threadIds[0])) {
+                return null;
+            } else {
+                //然后根据thread_id再去获得对应的评论和作者信息
+                JSONObject parentPostsJson = resultJson.getJSONObject("parentPosts");
+                //找出热门评论
+                String hotPosts = resultJson.getString("hotPosts").replace("[", "").replace
+                        ("]", "").replace("\"", "");
+                String[] allHotPosts = hotPosts.split("\\,");
+                ArrayList<Commentator> list = new ArrayList<>();
+                List<String> allHotPostsArray = Arrays.asList(allHotPosts);
+                for (String threadId : threadIds) {
+                    Commentator commentator = new Commentator();
+                    JSONObject threadObject = parentPostsJson.getJSONObject(threadId);
+                    //解析评论，打上TAG
+                    if (allHotPostsArray.contains(threadId)) {
+                        commentator.setTag(Commentator.TAG_HOT);
+                    } else {
+                        commentator.setTag(Commentator.TAG_NORMAL);
+                    }
+                    commentator.setPost_id(threadObject.optString("post_id"));
+                    commentator.setParent_id(threadObject.optString("parent_id"));
+
+                    String parentsString = threadObject.optString("parents").replace("[", "").replace
+                            ("]", "").replace("\"", "");
+
+                    String[] parents = parentsString.split("\\,");
+                    commentator.setParents(parents);
+                    //如果第一个数据为空，则只有一层
+                    if (TextUtils.isEmpty(parents[0]) || "null".equals(parents[0])) {
+                        commentator.setFloorNum(1);
+                    } else {
+                        commentator.setFloorNum(parents.length + 1);
+                    }
+
+                    commentator.setMessage(threadObject.optString("message"));
+                    commentator.setCreated_at(threadObject.optString("created_at"));
+                    JSONObject authorObject = threadObject.optJSONObject("author");
+                    commentator.setName(authorObject.optString("name"));
+                    commentator.setAvatar_url(authorObject.optString("avatar_url"));
+                    commentator.setType(Commentator.TYPE_NORMAL);
+                    list.add(commentator);
+                }
+                return list;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
 
     }

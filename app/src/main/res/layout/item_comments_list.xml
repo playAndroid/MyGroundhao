@@ -10,6 +10,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginLeft="16dp"
+        android:layout_gravity="center_vertical"
         fresco:actualImageScaleType="centerCrop"
         fresco:placeholderImage="@drawable/ic_loading_large" />
 
@@ -69,6 +70,7 @@
             android:textSize="@dimen/button_textsize" />
 
         <View
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#33333333" />

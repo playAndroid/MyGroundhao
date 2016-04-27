@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -20,11 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import blog.groundhao.com.mygroundhao.R;
+import blog.groundhao.com.mygroundhao.cache.NothingCache;
 import blog.groundhao.com.mygroundhao.callback.LoadFinishListener;
 import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
 import blog.groundhao.com.mygroundhao.model.NewsThingInfo;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.NewsThingDetailsActivity;
+import blog.groundhao.com.mygroundhao.utils.JSONParser;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
@@ -100,7 +103,7 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
     }
 
     public void loadFirst() {
-        newsThingInfos.clear();
+
         page = 1;
         loadDataFromServer();
     }
@@ -112,7 +115,8 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 
     private void loadDataFromServer() {
         if (NetWorkUtils.isNetWorkConnected(context)) {
-//            Logger.e("url:" + NewsThingInfo.URL_FRESH_NEWS + page);
+            Logger.e("url:" + NewsThingInfo.URL_FRESH_NEWS + page);
+            Logger.e("page"+page);
             OkHttpUtils.get().url(NewsThingInfo.URL_FRESH_NEWS + page).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e) {
@@ -126,6 +130,10 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
                     NewsThingInfo newsThingInfo = new Gson().fromJson(response, NewsThingInfo.class);
                     List<PostsBean> posts = newsThingInfo.getPosts();
                     if (!posts.isEmpty()) {
+                        if (page == 1) {
+                            newsThingInfos.clear();
+                            NothingCache.getInstance(context).clearAllCache();
+                        }
                         newsThingInfos.addAll(posts);
                         notifyDataSetChanged();
                         if (loadFinishListener != null) {
@@ -134,11 +142,22 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
                         if (loadSuccessListener != null) {
                             loadSuccessListener.onSuccessListener();
                         }
+
                     }
+
+                    NothingCache.getInstance(context).addResultCache(JSONParser.toString(response), page);
                 }
             });
         } else {
-            ShowToastUtils.Short("网络异常");
+            if (page == 1) {
+                newsThingInfos.clear();
+            }
+            newsThingInfos.addAll(NothingCache.getInstance(context).getCacheByPage(page));
+            ShowToastUtils.Short("无网络，当前为缓存数据");
+            notifyDataSetChanged();
+            if (loadFinishListener != null) {
+                loadFinishListener.finishDataFormServer();
+            }
         }
     }
 

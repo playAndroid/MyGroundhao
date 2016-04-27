@@ -80,13 +80,6 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(PictureAdapter.ViewHolder holder, int position) {
-        //对数据  网络资源等操控?
-//        DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                .setLowResImageRequest(ImageRequest.fromUri(newsThingInfo.getCustom_fields().getThumb_c().get(0)))
-//                .setImageRequest(ImageRequest.fromUri(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium")))
-//                .setOldController(holder.image_icon.getController())
-//                .build();
-//        holder.image_icon.setController(controller);
         final Comments comments = pictureLists.get(position);
         String uri = comments.getPics()[0];
         Uri imageUri = Uri.parse(uri);
@@ -101,6 +94,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         hierarchy.setProgressBarImage(new ProgressBarDrawable());
         holder.image_icon.setHierarchy(hierarchy);
         holder.image_icon.setImageURI(imageUri);
+//        Glide.with(context).load(uri).into(holder.image_icon);
         holder.tv_author.setText(comments.getComment_author());
         holder.tv_speck.setText("吐槽 " + comments.getCommentCount());
         holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(comments.getComment_date()));
@@ -216,7 +210,9 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                 new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e) {
-
+                        if (loadSuccessListener != null) {
+                            loadSuccessListener.onFaliListener();
+                        }
                     }
 
                     @Override
@@ -224,18 +220,15 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                         ArrayList<ResponseInfo> commentNumbers = new ArrayList<>();
                         try {
                             JSONObject jsonObject = null;
-                            jsonObject = new JSONObject(response).getJSONObject("response");
+                            jsonObject = new JSONObject(response).optJSONObject("response");
                             String s = sb.toString();
-
                             String[] split = s.split("\\,");
-                            Logger.e("截取内容" + s + "截取长度:" + split.length);
                             for (String comment_ID : split) {
-
                                 if (!jsonObject.isNull(comment_ID)) {
                                     ResponseInfo callback = new ResponseInfo();
-                                    callback.setComments(jsonObject.getJSONObject(comment_ID).getInt(ResponseInfo.COMMENTS));
-                                    callback.setThread_id(jsonObject.getJSONObject(comment_ID).getString(ResponseInfo.THREAD_ID));
-                                    callback.setThread_key(jsonObject.getJSONObject(comment_ID).getString(ResponseInfo.THREAD_KEY));
+                                    callback.setComments(jsonObject.getJSONObject(comment_ID).optInt(ResponseInfo.COMMENTS));
+                                    callback.setThread_id(jsonObject.getJSONObject(comment_ID).optString(ResponseInfo.THREAD_ID));
+                                    callback.setThread_key(jsonObject.getJSONObject(comment_ID).optString(ResponseInfo.THREAD_KEY));
                                     commentNumbers.add(callback);
                                 } else {
                                     //可能会出现没有对应id的数据的情况，为了保证条数一致，添加默认数据
@@ -243,14 +236,22 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
                                 }
                             }
                         } catch (JSONException e) {
+                            //TODO Json会出现解析异常
                             e.printStackTrace();
 //                                AppManager.getInstance().exitApp(context);
                             Logger.e("---------------------->" + "JSon解析出错");
+                            if (loadSuccessListener != null) {
+                                loadSuccessListener.onFaliListener();
+                            }
+                            return;
                         }
                         Logger.e("添加长度:" + comments.size() + "commentNumbers长度" + commentNumbers.size());
+
+
                         for (int i = 0; i < comments.size(); i++) {
                             comments.get(i).setCommentCount(commentNumbers.get(i).getComments());
                         }
+
                         Logger.e("添加长度:" + comments.size() + "commentNumbers长度" + commentNumbers.size());
                         pictureLists.addAll(comments);
                         notifyDataSetChanged();

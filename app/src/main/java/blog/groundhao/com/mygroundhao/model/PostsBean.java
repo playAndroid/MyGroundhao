@@ -26,6 +26,17 @@ public class PostsBean implements Serializable {
     private AuthorBean author;
     private int comment_count;
     private CustomFieldsBean custom_fields;
+
+    private CustomFields customFields;
+
+    public CustomFields getCustomFields() {
+        return customFields;
+    }
+
+    public void setCustomFields(CustomFields customFields) {
+        this.customFields = customFields;
+    }
+
     /**
      * id : 808
      * slug : 3d%e6%89%93%e5%8d%b0
@@ -35,6 +46,16 @@ public class PostsBean implements Serializable {
      */
 
     private List<TagsBean> tags;
+
+    public TagsBean getTagsBean() {
+        return tagsBean;
+    }
+
+    public void setTagsBean(TagsBean tagsBean) {
+        this.tagsBean = tagsBean;
+    }
+
+    private TagsBean tagsBean;
 
     public String getId() {
         return id;
@@ -100,67 +121,6 @@ public class PostsBean implements Serializable {
         this.tags = tags;
     }
 
-
-
-    public static class CustomFieldsBean implements Serializable{
-        private List<String> thumb_c;
-
-        public List<String> getThumb_c() {
-            return thumb_c;
-        }
-
-        public void setThumb_c(List<String> thumb_c) {
-            this.thumb_c = thumb_c;
-        }
-    }
-
-    public static class TagsBean implements Serializable{
-        private int id;
-        private String slug;
-        private String title;
-        private String description;
-        private int post_count;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getSlug() {
-            return slug;
-        }
-
-        public void setSlug(String slug) {
-            this.slug = slug;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public int getPost_count() {
-            return post_count;
-        }
-
-        public void setPost_count(int post_count) {
-            this.post_count = post_count;
-        }
-    }
 
     @Override
     public String toString() {
