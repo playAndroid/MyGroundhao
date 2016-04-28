@@ -46,10 +46,14 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
     private final ArrayList<PostsBean> newsThingInfos;
     private LoadFinishListener loadFinishListener;
     private LoadingSuccessListener loadSuccessListener;
+    private boolean isSave;
+    private Uri uri;
 
-    public NewsThingAdapter(Context context) {
+    public NewsThingAdapter(Context context, LoadFinishListener loadFinishListener, LoadingSuccessListener loadSuccessListener) {
         this.context = context;
         newsThingInfos = new ArrayList<>();
+        this.loadFinishListener = loadFinishListener;
+        this.loadSuccessListener = loadSuccessListener;
 
     }
 
@@ -64,9 +68,16 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
     @Override
     public void onBindViewHolder(NewsThingAdapter.ViewHolder holder, final int position) {
         final PostsBean newsThingInfo = newsThingInfos.get(position);
-        holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@" + newsThingInfo.getTags().get(0).getTitle());
-        holder.tv_look_num.setText("浏览" + newsThingInfo.getComment_count() + "次");
-        holder.text_title.setText(newsThingInfo.getTitle());
+        if (isSave) {
+            holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@");
+            holder.tv_look_num.setText("浏览" + newsThingInfo.getCustomFields().getViews() + "次");
+            holder.text_title.setText(newsThingInfo.getTitle());
+        } else {
+            holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@" + newsThingInfo.getTags().get(0).getTitle());
+            holder.tv_look_num.setText("浏览" + newsThingInfo.getComment_count() + "次");
+            holder.text_title.setText(newsThingInfo.getTitle());
+        }
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +97,12 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 //                .setOldController(holder.image_icon.getController())
 //                .build();
 //        holder.image_icon.setController(controller);
-        Uri uri = Uri.parse(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium"));
+        if (isSave) {
+            uri = Uri.parse(newsThingInfo.getCustomFields().getThumb_m().replace("custom", "medium"));
+        } else {
+            uri = Uri.parse(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium"));
+        }
+
         holder.image_icon.setImageURI(uri);
     }
 
@@ -115,8 +131,9 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 
     private void loadDataFromServer() {
         if (NetWorkUtils.isNetWorkConnected(context)) {
+            isSave = false;
             Logger.e("url:" + NewsThingInfo.URL_FRESH_NEWS + page);
-            Logger.e("page"+page);
+            Logger.e("page" + page);
             OkHttpUtils.get().url(NewsThingInfo.URL_FRESH_NEWS + page).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e) {
@@ -144,29 +161,26 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
                         }
 
                     }
-
-                    NothingCache.getInstance(context).addResultCache(JSONParser.toString(response), page);
+                    NothingCache.getInstance(context).addResultCache(JSONParser.toString(posts), page);
                 }
             });
         } else {
+            isSave = true;
+            if (loadFinishListener != null) {
+                loadFinishListener.finishDataFormServer();
+
+            }
+            if (loadSuccessListener != null) {
+                loadSuccessListener.onSuccessListener();
+            }
             if (page == 1) {
                 newsThingInfos.clear();
             }
             newsThingInfos.addAll(NothingCache.getInstance(context).getCacheByPage(page));
             ShowToastUtils.Short("无网络，当前为缓存数据");
             notifyDataSetChanged();
-            if (loadFinishListener != null) {
-                loadFinishListener.finishDataFormServer();
-            }
+
         }
-    }
-
-    public void setLoadFinishListener(LoadFinishListener loadFinishListener) {
-        this.loadFinishListener = loadFinishListener;
-    }
-
-    public void setLoadSuccessListener(LoadingSuccessListener loadSuccessListener) {
-        this.loadSuccessListener = loadSuccessListener;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

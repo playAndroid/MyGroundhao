@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.orhanobut.logger.Logger;
+
 import blog.groundhao.com.mygroundhao.R;
 import blog.groundhao.com.mygroundhao.callback.LoadFinishListener;
 import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
@@ -136,6 +138,7 @@ public class NothingFragment extends BaseFragment implements LoadFinishListener,
 
     @Override
     public void onSuccessListener() {
+        Logger.e("onSuccessListeneronSuccessListeneronSuccessListeneronSuccessListener");
         loading.setVisibility(View.GONE);
         if (swipe_view.isRefreshing()) {
             swipe_view.setRefreshing(false);

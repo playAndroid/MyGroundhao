@@ -73,16 +73,17 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
                 }, 2000);
             }
         });
-        newsThingAdapter = new NewsThingAdapter(getActivity());
-        newsThingAdapter.setLoadFinishListener(this);
-        newsThingAdapter.setLoadSuccessListener(this);
+        newsThingAdapter = new NewsThingAdapter(getActivity(), this, this);
         recycler_view.setAdapter(newsThingAdapter);
-        newsThingAdapter.loadFirst();
-        registerListener();
         loading.setVisibility(View.VISIBLE);
         loading.buildLayer();
+        newsThingAdapter.loadFirst();
+        registerListener();
+
     }
+
     Boolean isScrolling = false;
+
     private void registerListener() {
         recycler_view.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -101,9 +102,8 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
                 int itemCount = linearLayoutManager.getItemCount();
                 if (isScrolling && itemPosition >= itemCount - 3) {
                     isScrolling = false;
-                    newsThingAdapter.loadNextData();
-//                    swipe_view.setRefreshing(true);
                     loading.setVisibility(View.VISIBLE);
+                    newsThingAdapter.loadNextData();
                 }
             }
         });

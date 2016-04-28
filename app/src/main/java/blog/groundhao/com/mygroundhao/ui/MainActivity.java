@@ -71,7 +71,7 @@ public class MainActivity extends BestActivity {
 //                        Logger.e("网络可用");
                         EventBus.getDefault().post(new NetEvent(NetEvent.AVAILABLE));
                     } else {
-                        Logger.e("网络不可用");
+//                        Logger.e("网络不可用");
                         EventBus.getDefault().post(new NetEvent(NetEvent.UNAVAILABLE));
                     }
                 }
@@ -85,7 +85,7 @@ public class MainActivity extends BestActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventCheckNetWork(NetEvent netEvent) {
         if (netEvent.getType() == NetEvent.UNAVAILABLE) {
-            Logger.e("无网络连接");
+//            Logger.e("无网络连接");
             builder = new AlertDialog.Builder(this);
             builder.setTitle("无网络连接,是否开启?");
             builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

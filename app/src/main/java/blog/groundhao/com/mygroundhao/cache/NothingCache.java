@@ -59,10 +59,10 @@ public class NothingCache extends BaseCache {
                 return parseCache(new JSONArray(query.list().get(0).getResult()));
             } catch (JSONException e) {
                 e.printStackTrace();
-                return new ArrayList<PostsBean>();
+                return new ArrayList<>();
             }
         } else {
-            return new ArrayList<PostsBean>();
+            return new ArrayList<>();
         }
 
     }
