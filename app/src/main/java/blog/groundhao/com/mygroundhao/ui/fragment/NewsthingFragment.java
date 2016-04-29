@@ -63,7 +63,6 @@ public class NewsthingFragment extends BaseFragment implements LoadFinishListene
             @Override
             public void onRefresh() {
                 newsThingAdapter.loadFirst();
-//                swipe_view.com
                 swipe_view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
