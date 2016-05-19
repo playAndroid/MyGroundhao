@@ -27,7 +27,6 @@ import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
 import blog.groundhao.com.mygroundhao.model.NewsThingInfo;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.NewsThingDetailsActivity;
-import blog.groundhao.com.mygroundhao.utils.JSONParser;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
@@ -46,7 +45,7 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
     private final ArrayList<PostsBean> newsThingInfos;
     private LoadFinishListener loadFinishListener;
     private LoadingSuccessListener loadSuccessListener;
-    private boolean isSave;
+    //    private boolean isSave;
     private Uri uri;
 
     public NewsThingAdapter(Context context, LoadFinishListener loadFinishListener, LoadingSuccessListener loadSuccessListener) {
@@ -68,15 +67,15 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
     @Override
     public void onBindViewHolder(NewsThingAdapter.ViewHolder holder, final int position) {
         final PostsBean newsThingInfo = newsThingInfos.get(position);
-        if (isSave) {
-            holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@");
-            holder.tv_look_num.setText("浏览" + newsThingInfo.getCustomFields().getViews() + "次");
-            holder.text_title.setText(newsThingInfo.getTitle());
-        } else {
-            holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@" + newsThingInfo.getTags().get(0).getTitle());
-            holder.tv_look_num.setText("浏览" + newsThingInfo.getComment_count() + "次");
-            holder.text_title.setText(newsThingInfo.getTitle());
-        }
+//        if (isSave) {
+//            holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@");
+//            holder.tv_look_num.setText("浏览" + newsThingInfo.getCustomFields().getViews() + "次");
+//            holder.text_title.setText(newsThingInfo.getTitle());
+//        } else {
+        holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@" + newsThingInfo.getTags().get(0).getTitle());
+        holder.tv_look_num.setText("浏览" + newsThingInfo.getComment_count() + "次");
+        holder.text_title.setText(newsThingInfo.getTitle());
+//        }
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,11 +96,11 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 //                .setOldController(holder.image_icon.getController())
 //                .build();
 //        holder.image_icon.setController(controller);
-        if (isSave) {
-            uri = Uri.parse(newsThingInfo.getCustomFields().getThumb_m().replace("custom", "medium"));
-        } else {
-            uri = Uri.parse(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium"));
-        }
+//        if (isSave) {
+//            uri = Uri.parse(newsThingInfo.getCustomFields().getThumb_m().replace("custom", "medium"));
+//        } else {
+        uri = Uri.parse(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium"));
+//        }
 
         holder.image_icon.setImageURI(uri);
     }
@@ -131,9 +130,8 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 
     private void loadDataFromServer() {
         if (NetWorkUtils.isNetWorkConnected(context)) {
-            isSave = false;
+//            isSave = false;
             Logger.e("url:" + NewsThingInfo.URL_FRESH_NEWS + page);
-            Logger.e("page" + page);
             OkHttpUtils.get().url(NewsThingInfo.URL_FRESH_NEWS + page).build().execute(new StringCallback() {
                 @Override
                 public void onError(Call call, Exception e) {
@@ -161,11 +159,11 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
                         }
 
                     }
-                    NothingCache.getInstance(context).addResultCache(JSONParser.toString(posts), page);
+                    NothingCache.getInstance(context).addResultCache(response, page);
                 }
             });
         } else {
-            isSave = true;
+//            isSave = true;
             if (loadFinishListener != null) {
                 loadFinishListener.finishDataFormServer();
 

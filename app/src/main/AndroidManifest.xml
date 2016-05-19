@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="blog.groundhao.com.mygroundhao">
+    package="blog.groundhao.com.mygroundhao"
+    android:versionCode="8"
+    android:versionName="1.4">
 
     <!-- 访问网络权限-->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,6 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <!--震动权限-->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".engine.GroundHaoApplication"
         android:allowBackup="true"

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by user on 2016/4/18.
  */
-public class PostsBean implements Serializable {
+public class PostsBean  implements Serializable{
 
     private String id;
     private String url;

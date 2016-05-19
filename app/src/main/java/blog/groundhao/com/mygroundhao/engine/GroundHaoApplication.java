@@ -29,6 +29,7 @@ public class GroundHaoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Logger.init(TAG);
+        mApplication = this;
         context = this;
         OkHttpUtils.getInstance();
         //初始化并配置Fresco
@@ -41,6 +42,8 @@ public class GroundHaoApplication extends Application {
                         .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
+        Apn.init();
+
     }
 
     public synchronized static GroundHaoApplication getInstance() {

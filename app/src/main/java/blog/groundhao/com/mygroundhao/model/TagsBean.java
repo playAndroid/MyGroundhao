@@ -2,10 +2,12 @@ package blog.groundhao.com.mygroundhao.model;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by user on 2016/4/27.
  */
-public class TagsBean {
+public class TagsBean implements Serializable{
     private int id;
     private String slug;
     private String title;

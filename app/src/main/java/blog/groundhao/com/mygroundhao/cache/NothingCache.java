@@ -2,17 +2,21 @@ package blog.groundhao.com.mygroundhao.cache;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.orhanobut.logger.Logger;
+
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import blog.groundhao.com.mygroundhao.DaoSession;
 import blog.groundhao.com.mygroundhao.NothingCacheDao;
 import blog.groundhao.com.mygroundhao.engine.GroundHaoApplication;
 import blog.groundhao.com.mygroundhao.model.AuthorBean;
 import blog.groundhao.com.mygroundhao.model.CustomFields;
+import blog.groundhao.com.mygroundhao.model.NewsThingInfo;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.model.TagsBean;
 import de.greenrobot.dao.query.QueryBuilder;
@@ -56,8 +60,9 @@ public class NothingCache extends BaseCache {
                 .where(NothingCacheDao.Properties.Page.eq("" + page));
         if (query.list().size() > 0) {
             try {
-                return parseCache(new JSONArray(query.list().get(0).getResult()));
-            } catch (JSONException e) {
+                Logger.e("ssssssssssss=>>>"+query.list().get(0).getResult());
+                return parseCacheFromGson(query.list().get(0).getResult());
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new ArrayList<>();
             }
@@ -74,6 +79,13 @@ public class NothingCache extends BaseCache {
         nothingCache.setPage(page);
         nothingCache.setTime(System.currentTimeMillis());
         nothingCacheDao.insert(nothingCache);
+    }
+
+
+    private ArrayList<PostsBean> parseCacheFromGson(String response) {
+        NewsThingInfo newsThingInfo = new Gson().fromJson(response, NewsThingInfo.class);
+        List<PostsBean> posts = newsThingInfo.getPosts();
+        return (ArrayList<PostsBean>) posts;
     }
 
 

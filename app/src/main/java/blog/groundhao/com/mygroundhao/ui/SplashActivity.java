@@ -13,9 +13,11 @@ import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
 
+import java.util.Map;
 import java.util.Random;
 
 import blog.groundhao.com.mygroundhao.R;
+import blog.groundhao.com.mygroundhao.engine.Apn;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -86,7 +88,14 @@ public class SplashActivity extends AppCompatActivity {
         splashImage.setImageResource(SPLASH_ARRAY[random.nextInt(SPLASH_ARRAY.length)]);
         content.setText(SPLASH_CONTENT[random.nextInt(SPLASH_CONTENT.length)]);
         animateImage();
+        Map<String, String> heads = Apn.getHeads();
+        StringBuffer sb = new StringBuffer();
+        sb.append("手机信息");
+        for (Map.Entry<String, String> entrie : heads.entrySet()) {
 
+            sb.append(entrie.getKey() + ":" + entrie.getValue()+"\n");
+        }
+        Logger.e(sb.toString());
     }
 
     private void animateImage() {
