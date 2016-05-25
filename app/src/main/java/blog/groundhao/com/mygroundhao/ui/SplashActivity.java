@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.orhanobut.logger.Logger;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import java.util.Map;
 import java.util.Random;
@@ -93,9 +94,15 @@ public class SplashActivity extends AppCompatActivity {
         sb.append("手机信息");
         for (Map.Entry<String, String> entrie : heads.entrySet()) {
 
-            sb.append(entrie.getKey() + ":" + entrie.getValue()+"\n");
+            sb.append(entrie.getKey() + ":" + entrie.getValue() + "\n");
         }
         Logger.e(sb.toString());
+        try {
+            CrashReport.testJavaCrash();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Logger.e("出错了出错了出错了出错了出错了出错了,捕捉到了不崩溃,^_^");
+        }
     }
 
     private void animateImage() {

@@ -8,6 +8,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.decoder.SimpleProgressiveJpegConfig;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.Logger;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import blog.groundhao.com.mygroundhao.DaoMaster;
@@ -43,6 +44,7 @@ public class GroundHaoApplication extends Application {
                         .enableWebKitInspector(Stetho.defaultInspectorModulesProvider(this))
                         .build());
         Apn.init();
+        CrashReport.initCrashReport(getApplicationContext(), "900031750", false);
 
     }
 
