@@ -5,8 +5,8 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_margin="@dimen/card_view_space"
+    android:orientation="vertical"
     card:cardCornerRadius="5dp"
     card:cardElevation="10dp">
     <!--cardMaxElevation：最大卡片阴影的宽度-->
@@ -46,23 +46,28 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp">
 
-            <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/image_icon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            fresco:actualImageScaleType="fitCenter"
-            fresco:failureImage="@drawable/error"
-            fresco:failureImageScaleType="centerInside"
-            fresco:placeholderImage="@drawable/ic_loading_large"
-            fresco:placeholderImageScaleType="focusCrop"
-            fresco:roundedCornerRadius="5dp"
-            fresco:viewAspectRatio="0.8" />
+            <!--<com.facebook.drawee.view.SimpleDraweeView-->
+            <!--android:id="@+id/image_icon"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--fresco:actualImageScaleType="fitCenter"-->
+            <!--fresco:failureImage="@drawable/error"-->
+            <!--fresco:failureImageScaleType="centerInside"-->
+            <!--fresco:placeholderImage="@drawable/ic_loading_large"-->
+            <!--fresco:placeholderImageScaleType="focusCrop"-->
+            <!--fresco:roundedCornerRadius="5dp"-->
+            <!--fresco:viewAspectRatio="0.8" />-->
+            <ImageView
+                android:id="@+id/image_icon"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                android:layout_height="wrap_content" />
             <!--<ImageView-->
-                <!--android:src="@drawable/ic_loading_large"-->
-                <!--android:id="@+id/image_icon"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:layout_height="wrap_content" />-->
+            <!--android:src="@drawable/ic_loading_large"-->
+            <!--android:id="@+id/image_icon"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:scaleType="centerCrop"-->
+            <!--android:layout_height="wrap_content" />-->
 
             <ImageView
                 android:id="@+id/image_gif"

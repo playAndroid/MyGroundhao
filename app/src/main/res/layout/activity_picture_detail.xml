@@ -5,18 +5,24 @@
     android:layout_height="match_parent">
 
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <!--<com.facebook.drawee.view.SimpleDraweeView-->
+        <!--android:id="@+id/image_icon"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--fresco:actualImageScaleType="centerCrop"-->
+        <!--fresco:failureImage="@drawable/error"-->
+        <!--fresco:failureImageScaleType="centerInside"-->
+        <!--fresco:placeholderImage="@drawable/ic_loading_large"-->
+        <!--fresco:placeholderImageScaleType="focusCrop"-->
+        <!--fresco:roundedCornerRadius="5dp"-->
+        <!--fresco:viewAspectRatio="0.8" />-->
+    <ImageView
         android:id="@+id/image_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        fresco:actualImageScaleType="centerCrop"
-        fresco:failureImage="@drawable/error"
-        fresco:failureImageScaleType="centerInside"
-        fresco:placeholderImage="@drawable/ic_loading_large"
-        fresco:placeholderImageScaleType="focusCrop"
-        fresco:roundedCornerRadius="5dp"
-        fresco:viewAspectRatio="0.8" />
+        />
 
     <RelativeLayout
         android:id="@+id/relative_layout"

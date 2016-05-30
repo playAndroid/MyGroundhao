@@ -9,9 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -27,6 +27,7 @@ import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
 import blog.groundhao.com.mygroundhao.model.NewsThingInfo;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.NewsThingDetailsActivity;
+import blog.groundhao.com.mygroundhao.utils.ImageLoadUtils;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
@@ -99,10 +100,12 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 //        if (isSave) {
 //            uri = Uri.parse(newsThingInfo.getCustomFields().getThumb_m().replace("custom", "medium"));
 //        } else {
-        uri = Uri.parse(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium"));
+        String url = newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium");
+        uri = Uri.parse(url);
 //        }
 
-        holder.image_icon.setImageURI(uri);
+//        holder.image_icon.setImageURI(uri);
+        ImageLoadUtils.loadImage(context,url,holder.image_icon);
     }
 
     private void toJumpActivity(int position) {
@@ -185,7 +188,7 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
         @Bind(R.id.card)
         CardView cardView;
         @Bind(R.id.image_icon)
-        SimpleDraweeView image_icon;
+        ImageView image_icon;
         @Bind(R.id.text_title)
         TextView text_title;
         @Bind(R.id.tv_author)

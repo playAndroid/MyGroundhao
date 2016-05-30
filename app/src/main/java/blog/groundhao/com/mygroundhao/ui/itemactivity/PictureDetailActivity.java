@@ -7,16 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.controller.ControllerListener;
-import com.facebook.drawee.interfaces.DraweeController;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 import com.facebook.imagepipeline.image.QualityInfo;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -25,6 +23,7 @@ import com.orhanobut.logger.Logger;
 import blog.groundhao.com.mygroundhao.R;
 import blog.groundhao.com.mygroundhao.engine.uibest.BestActivity;
 import blog.groundhao.com.mygroundhao.model.Comments;
+import blog.groundhao.com.mygroundhao.utils.ImageLoadUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,7 +49,7 @@ public class PictureDetailActivity extends BestActivity {
     @Bind(R.id.linear_layout)
     LinearLayout linear_layout;
     @Bind(R.id.image_icon)
-    SimpleDraweeView mSimpleDraweeView;
+    ImageView mSimpleDraweeView;
     @Bind(R.id.progress)
     ProgressBar progressBar;
     public static final int ANIMATION_DURATION = 500;
@@ -128,18 +127,17 @@ public class PictureDetailActivity extends BestActivity {
         String stringUrl = comments.getPics()[0];
         Uri uri = Uri.parse(stringUrl);
 //        if (stringUrl.endsWith(".gif")) {
-        DraweeController controller = Fresco.newDraweeControllerBuilder()
-                .setControllerListener(controllerListener)
-                .setUri(uri)
-                .setAutoPlayAnimations(true)
-//                . // other setters
-                .build();
-
-        mSimpleDraweeView.setController(controller);
+//        DraweeController controller = Fresco.newDraweeControllerBuilder()
+//                .setControllerListener(controllerListener)
+//                .setUri(uri)
+//                .setAutoPlayAnimations(true)
+////                . // other setters
+//                .build();
+//        mSimpleDraweeView.setController(controller);
 //        } else {
 //            mSimpleDraweeView.setImageURI(uri);
 //        }
-
+        ImageLoadUtils.loadImage(this,stringUrl,mSimpleDraweeView);
 
     }
 

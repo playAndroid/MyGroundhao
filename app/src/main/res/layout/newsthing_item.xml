@@ -22,15 +22,20 @@
             android:layout_width="match_parent"
             android:layout_height="220dp">
 
-            <com.facebook.drawee.view.SimpleDraweeView
+            <ImageView
                 android:id="@+id/image_icon"
+                android:scaleType="fitXY"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                fresco:failureImage="@drawable/error"
-                fresco:failureImageScaleType="centerInside"
-                fresco:placeholderImage="@drawable/ic_loading_large"
-                fresco:placeholderImageScaleType="fitXY"
-                fresco:roundedCornerRadius="5dp" />
+                android:layout_height="match_parent" />
+            <!--<com.facebook.drawee.view.SimpleDraweeView-->
+            <!--android:id="@+id/image_icon"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--fresco:failureImage="@drawable/error"-->
+            <!--fresco:failureImageScaleType="centerInside"-->
+            <!--fresco:placeholderImage="@drawable/ic_loading_large"-->
+            <!--fresco:placeholderImageScaleType="fitXY"-->
+            <!--fresco:roundedCornerRadius="5dp" />-->
             <!--android:scaleType="fitXY"-->
 
             <TextView

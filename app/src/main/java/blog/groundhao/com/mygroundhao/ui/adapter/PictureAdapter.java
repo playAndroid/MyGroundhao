@@ -16,10 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.drawable.ProgressBarDrawable;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -40,6 +37,7 @@ import blog.groundhao.com.mygroundhao.model.NoThingInfo;
 import blog.groundhao.com.mygroundhao.model.ResponseInfo;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.CommentCountAcitivity;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.PictureDetailActivity;
+import blog.groundhao.com.mygroundhao.utils.ImageLoadUtils;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
@@ -84,22 +82,27 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         String uri = comments.getPics()[0];
         Uri imageUri = Uri.parse(uri);
         holder.image_gif.setVisibility(uri.endsWith(".gif") ? View.VISIBLE : View.GONE);
-        if (hierarchy == null) {
-            //对布局和本地资源进行操控?
-            hierarchy = new GenericDraweeHierarchyBuilder(context.getResources())
-                    .build();
-        } else {
-            hierarchy = holder.image_icon.getHierarchy();
-        }
-        hierarchy.setProgressBarImage(new ProgressBarDrawable());
-        holder.image_icon.setHierarchy(hierarchy);
-        holder.image_icon.setImageURI(imageUri);
+//        if (hierarchy == null) {
+//            //对布局和本地资源进行操控?
+//            hierarchy = new GenericDraweeHierarchyBuilder(context.getResources())
+//                    .build();
+//        } else {
+//            hierarchy = holder.image_icon.getHierarchy();
+//        }
+//        hierarchy.setProgressBarImage(new ProgressBarDrawable());
+//        holder.image_icon.setHierarchy(hierarchy);
+//        holder.image_icon.setImageURI(imageUri);
 //        Glide.with(context).load(uri).into(holder.image_icon);
         holder.tv_author.setText(comments.getComment_author());
         holder.tv_speck.setText("吐槽 " + comments.getCommentCount());
         holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(comments.getComment_date()));
         holder.tv_oo.setText("OO " + comments.getVote_positive());
         holder.tv_xx.setText("XX " + comments.getVote_negative());
+        if(holder.image_gif.getVisibility() == View.VISIBLE){
+            ImageLoadUtils.loadImageForGIF(context,uri,holder.image_icon);
+        }else{
+            ImageLoadUtils.loadImage(context,uri,holder.image_icon);
+        }
 
         holder.img_share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,7 +284,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         @Bind(R.id.tv_time)
         TextView tv_time;
         @Bind(R.id.image_icon)
-        SimpleDraweeView image_icon;
+        ImageView image_icon;
         @Bind(R.id.tv_oo)
         TextView tv_oo;
         @Bind(R.id.tv_xx)
