@@ -17,7 +17,7 @@
         <!--fresco:placeholderImageScaleType="focusCrop"-->
         <!--fresco:roundedCornerRadius="5dp"-->
         <!--fresco:viewAspectRatio="0.8" />-->
-    <ImageView
+    <blog.groundhao.com.mygroundhao.view.MyZoomImageView
         android:id="@+id/image_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
