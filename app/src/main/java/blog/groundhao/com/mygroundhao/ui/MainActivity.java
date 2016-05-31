@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,6 +58,11 @@ public class MainActivity extends BestActivity {
         initData();
         replaceFragment(R.id.frage_content, new NewsthingFragment());
         replaceFragment(R.id.frage_list, new ItemListFragment());
+    }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        return super.onCreateView(name, context, attrs);
     }
 
     private void initData() {

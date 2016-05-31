@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -25,6 +24,7 @@ import blog.groundhao.com.mygroundhao.engine.uibest.BestActivity;
 import blog.groundhao.com.mygroundhao.model.Comments;
 import blog.groundhao.com.mygroundhao.utils.ImageLoadUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
+import blog.groundhao.com.mygroundhao.view.MyZoomImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -49,7 +49,7 @@ public class PictureDetailActivity extends BestActivity {
     @Bind(R.id.linear_layout)
     LinearLayout linear_layout;
     @Bind(R.id.image_icon)
-    ImageView mSimpleDraweeView;
+    MyZoomImageView mSimpleDraweeView;
     @Bind(R.id.progress)
     ProgressBar progressBar;
     public static final int ANIMATION_DURATION = 500;
@@ -86,7 +86,7 @@ public class PictureDetailActivity extends BestActivity {
         mSimpleDraweeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleBar();
+//                toggleBar();
             }
         });
         tv_oo.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +137,14 @@ public class PictureDetailActivity extends BestActivity {
 //        } else {
 //            mSimpleDraweeView.setImageURI(uri);
 //        }
-        ImageLoadUtils.loadImage(this,stringUrl,mSimpleDraweeView);
+        if(stringUrl.endsWith(".gif")){
+            mSimpleDraweeView.setCanScale(false);
+            ImageLoadUtils.loadImageForGIF(this,stringUrl,mSimpleDraweeView);
+        }else{
+            mSimpleDraweeView.setCanScale(true);
+            ImageLoadUtils.loadImage(this,stringUrl,mSimpleDraweeView);
+        }
+
 
     }
 
@@ -189,7 +196,7 @@ public class PictureDetailActivity extends BestActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        toggleBar();
+//        toggleBar();
     }
 
     private void initView() {

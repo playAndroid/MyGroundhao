@@ -123,11 +123,9 @@ public class MyZoomImageView extends ImageView implements ViewTreeObserver.OnGlo
 
                 if (isAutoScale) return true;
                 if (getScale() < mMidScale) {
-//                    mScaleMatrix.postScale(mMidScale / getScale(), mMidScale / getScale(), x, y);
                     postDelayed(new AutoScaleRunnable(mMidScale, x, y), 16);
                     isAutoScale = true;
                 } else {
-//                    mScaleMatrix.postScale(mInitScale / getScale(), mInitScale / getScale(), x, y);
                     postDelayed(new AutoScaleRunnable(mInitScale, x, y), 16);
                     isAutoScale = true;
                 }

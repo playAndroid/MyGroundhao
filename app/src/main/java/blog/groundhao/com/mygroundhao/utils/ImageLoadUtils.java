@@ -13,14 +13,38 @@ import blog.groundhao.com.mygroundhao.R;
  */
 public class ImageLoadUtils {
 
+    /**
+     * 加载静态图片
+     *
+     * @param context
+     * @param url
+     * @param imageView
+     */
     public static void loadImage(Context context, String url, ImageView imageView) {
-        Glide.with(context).load(url).centerCrop()
+        Glide.with(context).load(url).asBitmap().centerCrop().error(R.drawable.error)
                 .placeholder(R.drawable.ic_loading_large)
-                .crossFade().into(imageView);
+                .into(imageView);//crossFade 淡入淡出
     }
 
-    public static void loadImageForGIF(Context context, String url, ImageView imageView){
-        Glide.with(context).load(url).asBitmap().centerCrop()
+    public static void loadImageForGIF(Context context, String url, ImageView imageView) {
+        Glide.with(context).load(url).asGif().centerCrop().error(R.drawable.error)
+                .placeholder(R.drawable.ic_loading_large).crossFade()
+                .into(imageView);
+    }
+
+    public static void loadImageDef(Context context, String url, ImageView imageView) {
+        Glide.with(context).load(url).into(imageView);
+    }
+
+    /**
+     * 加载静态图片
+     *
+     * @param context
+     * @param url
+     * @param imageView
+     */
+    public static void loadImageForGIFforBitmap(Context context, String url, ImageView imageView) {
+        Glide.with(context).load(url).asBitmap().centerCrop().error(R.drawable.error)
                 .placeholder(R.drawable.ic_loading_large)
                 .into(imageView);
     }

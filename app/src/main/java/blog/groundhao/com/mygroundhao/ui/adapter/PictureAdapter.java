@@ -98,11 +98,11 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(comments.getComment_date()));
         holder.tv_oo.setText("OO " + comments.getVote_positive());
         holder.tv_xx.setText("XX " + comments.getVote_negative());
-        if(holder.image_gif.getVisibility() == View.VISIBLE){
-            ImageLoadUtils.loadImageForGIF(context,uri,holder.image_icon);
-        }else{
+//        if(holder.image_gif.getVisibility() == View.VISIBLE){
+//            ImageLoadUtils.loadImageForGIF(context,uri,holder.image_icon);
+//        }else{
             ImageLoadUtils.loadImage(context,uri,holder.image_icon);
-        }
+//        }
 
         holder.img_share.setOnClickListener(new View.OnClickListener() {
             @Override
