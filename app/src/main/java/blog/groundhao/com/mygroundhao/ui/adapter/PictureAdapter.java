@@ -101,7 +101,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 //        if(holder.image_gif.getVisibility() == View.VISIBLE){
 //            ImageLoadUtils.loadImageForGIF(context,uri,holder.image_icon);
 //        }else{
-            ImageLoadUtils.loadImage(context,uri,holder.image_icon);
+        ImageLoadUtils.loadImage(context, uri, holder.image_icon);
 //        }
 
         holder.img_share.setOnClickListener(new View.OnClickListener() {
