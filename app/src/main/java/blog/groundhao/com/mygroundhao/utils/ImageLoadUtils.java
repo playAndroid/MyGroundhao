@@ -30,6 +30,13 @@ public class ImageLoadUtils {
                 .into(imageView);//crossFade 淡入淡出
     }
 
+    /**
+     * 加载GIF图片
+     *
+     * @param context
+     * @param url
+     * @param imageView
+     */
     public static void loadImageForGIF(Context context, String url, ImageView imageView) {
         Glide.with(context).load(url).asGif().centerCrop().error(R.drawable.error)
                 .placeholder(R.drawable.ic_loading_large).crossFade()
