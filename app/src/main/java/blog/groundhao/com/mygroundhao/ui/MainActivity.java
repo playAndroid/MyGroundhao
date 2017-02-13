@@ -66,7 +66,6 @@ public class MainActivity extends BestActivity {
     }
 
     private void initData() {
-
         netWorkBroadcast = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

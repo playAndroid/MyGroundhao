@@ -27,7 +27,6 @@ import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
 import blog.groundhao.com.mygroundhao.model.NewsThingInfo;
 import blog.groundhao.com.mygroundhao.model.PostsBean;
 import blog.groundhao.com.mygroundhao.ui.itemactivity.NewsThingDetailsActivity;
-import blog.groundhao.com.mygroundhao.utils.ImageLoadUtils;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShareUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
@@ -100,12 +99,13 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 //        if (isSave) {
 //            uri = Uri.parse(newsThingInfo.getCustomFields().getThumb_m().replace("custom", "medium"));
 //        } else {
-        String url = newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium");
-        uri = Uri.parse(url);
+//        String url = newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium");
+//        uri = Uri.parse(url);
 //        }
 
 //        holder.image_icon.setImageURI(uri);
-        ImageLoadUtils.loadImage(context,url,holder.image_icon);
+//        ImageLoadUtils.loadImage(context,"",holder.image_icon);
+        holder.image_icon.setImageResource(R.drawable.newthings);
     }
 
     private void toJumpActivity(int position) {

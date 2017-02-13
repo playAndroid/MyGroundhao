@@ -2,6 +2,7 @@ package blog.groundhao.com.mygroundhao.ui.adapter;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +30,7 @@ import blog.groundhao.com.mygroundhao.callback.LoadingSuccessListener;
 import blog.groundhao.com.mygroundhao.model.ResponseInfo;
 import blog.groundhao.com.mygroundhao.model.Video;
 import blog.groundhao.com.mygroundhao.model.VideoInfo;
+import blog.groundhao.com.mygroundhao.ui.VideoDetailActivity;
 import blog.groundhao.com.mygroundhao.utils.NetWorkUtils;
 import blog.groundhao.com.mygroundhao.utils.ShowToastUtils;
 import butterknife.Bind;
@@ -62,13 +64,21 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ViewHolder> 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(VideoAdapter.ViewHolder holder, int position) {
-        Video video = videoLists.get(position);
+        final Video video = videoLists.get(position);
         Uri imageUri = Uri.parse(video.getImgUrl());
         holder.image_icon.setImageURI(imageUri);
         holder.tv_speck.setText("吐槽 " + video.getComment_count());
         holder.tv_oo.setText("OO " + video.getVote_positive());
         holder.tv_xx.setText("XX " + video.getVote_negative());
         holder.tv_title.setText(video.getTitle());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, VideoDetailActivity.class);
+                intent.putExtra("url", video.getUrl());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

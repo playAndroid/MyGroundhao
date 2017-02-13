@@ -14,4 +14,6 @@
     <string name="video">小视屏</string>
     <string name="setting">设置</string>
     <string name="action_share">设置</string>
+    <string name="loading">加载中...</string>
+    <string name="action_more">更多</string>
 </resources>
