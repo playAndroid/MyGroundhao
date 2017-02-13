@@ -15,8 +15,6 @@ public abstract class NewsThingCallback extends Callback<NewsThingInfo> {
     @Override
     public NewsThingInfo parseNetworkResponse(Response response) throws Exception {
         String string = response.body().toString();
-//        List list = new Gson().fromJson(string, new TypeToken<List<NewsThingInfo>>() {
-//        }.getType());
         NewsThingInfo newsThingInfo = new Gson().fromJson(string, NewsThingInfo.class);
         return newsThingInfo;
     }

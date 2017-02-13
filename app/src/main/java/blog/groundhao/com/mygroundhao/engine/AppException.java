@@ -17,10 +17,6 @@ public class AppException extends Exception implements Thread.UncaughtExceptionH
 
     private Thread.UncaughtExceptionHandler mDefaultHandler;
 
-//    @Override
-//    public void uncaughtException(Thread thread, Throwable ex) {
-//
-//    }
 
     private AppException() {
         super();

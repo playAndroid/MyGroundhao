@@ -126,17 +126,6 @@ public class PictureDetailActivity extends BestActivity {
         Logger.e("进入图片详情页" + comments.getComment_author());
         String stringUrl = comments.getPics()[0];
         Uri uri = Uri.parse(stringUrl);
-//        if (stringUrl.endsWith(".gif")) {
-//        DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                .setControllerListener(controllerListener)
-//                .setUri(uri)
-//                .setAutoPlayAnimations(true)
-////                . // other setters
-//                .build();
-//        mSimpleDraweeView.setController(controller);
-//        } else {
-//            mSimpleDraweeView.setImageURI(uri);
-//        }
         if(stringUrl.endsWith(".gif")){
             mSimpleDraweeView.setCanScale(false);
             ImageLoadUtils.loadImageForGIF(this,stringUrl,mSimpleDraweeView);

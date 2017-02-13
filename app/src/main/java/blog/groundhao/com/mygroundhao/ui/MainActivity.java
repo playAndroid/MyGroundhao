@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
@@ -119,7 +120,10 @@ public class MainActivity extends BestActivity {
         toolbar.setTitle(R.string.app_name);
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.first, R.string.second) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -181,49 +185,18 @@ public class MainActivity extends BestActivity {
         drawerLayout.closeDrawers();
     }
 
-    protected long endTime;
 
-    //    /**
-//     * 返回键返回上一层视图
-//     *
-//     * @param keyCode
-//     * @param event
-//     * @return
-//     */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Logger.e("onKeyDown");
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-//            if (System.currentTimeMillis() - endTime > 2000) {
-            //Again according to exit the application
-//                ShowToastUtils.Short("再按一次退出应用");
-//                endTime = System.currentTimeMillis();
-//            try {
-//                int i = 3 / 0;
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-
             dialog();
             return true;
-//            }
-//            else {
-//                finish();
-//            }
         }
         return super.onKeyDown(keyCode, event);
     }
 
     public void dialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//            @Override
-//            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-//                if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-//                    ShowToastUtils.Short("返回了");
-//                }
-//                return false;
-//            }
-//        });
         builder.setTitle("确认要退出应用吗?");
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -240,9 +213,4 @@ public class MainActivity extends BestActivity {
         builder.show();
     }
 
-//    @Override
-//    public void onBackPressed() {
-////        super.onBackPressed();
-//
-//    }
 }

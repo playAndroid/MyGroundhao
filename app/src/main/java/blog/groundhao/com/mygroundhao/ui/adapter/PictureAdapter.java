@@ -82,27 +82,12 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
         String uri = comments.getPics()[0];
         Uri imageUri = Uri.parse(uri);
         holder.image_gif.setVisibility(uri.endsWith(".gif") ? View.VISIBLE : View.GONE);
-//        if (hierarchy == null) {
-//            //对布局和本地资源进行操控?
-//            hierarchy = new GenericDraweeHierarchyBuilder(context.getResources())
-//                    .build();
-//        } else {
-//            hierarchy = holder.image_icon.getHierarchy();
-//        }
-//        hierarchy.setProgressBarImage(new ProgressBarDrawable());
-//        holder.image_icon.setHierarchy(hierarchy);
-//        holder.image_icon.setImageURI(imageUri);
-//        Glide.with(context).load(uri).into(holder.image_icon);
         holder.tv_author.setText(comments.getComment_author());
         holder.tv_speck.setText("吐槽 " + comments.getCommentCount());
         holder.tv_time.setText(TimeUtils.dateStringFormatGoodExperienceDate(comments.getComment_date()));
         holder.tv_oo.setText("OO " + comments.getVote_positive());
         holder.tv_xx.setText("XX " + comments.getVote_negative());
-//        if(holder.image_gif.getVisibility() == View.VISIBLE){
-//            ImageLoadUtils.loadImageForGIF(context,uri,holder.image_icon);
-//        }else{
         ImageLoadUtils.loadImage(context, uri, holder.image_icon);
-//        }
 
         holder.img_share.setOnClickListener(new View.OnClickListener() {
             @Override

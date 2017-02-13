@@ -58,8 +58,6 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 
     @Override
     public NewsThingAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view = View.inflate(context, R.layout.newsthing_item, parent);
-//        Fresco.initialize(context);
         View view = LayoutInflater.from(context).inflate(R.layout.newsthing_item, parent, false);
         return new ViewHolder(view);
     }
@@ -67,11 +65,6 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
     @Override
     public void onBindViewHolder(NewsThingAdapter.ViewHolder holder, final int position) {
         final PostsBean newsThingInfo = newsThingInfos.get(position);
-//        if (isSave) {
-//            holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@");
-//            holder.tv_look_num.setText("浏览" + newsThingInfo.getCustomFields().getViews() + "次");
-//            holder.text_title.setText(newsThingInfo.getTitle());
-//        } else {
         holder.tv_author.setText(newsThingInfo.getAuthor().getName() + "@" + newsThingInfo.getTags().get(0).getTitle());
         holder.tv_look_num.setText("浏览" + newsThingInfo.getComment_count() + "次");
         holder.text_title.setText(newsThingInfo.getTitle());
@@ -89,22 +82,6 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
                 ShareUtils.shareText((Activity) context, "哈哈,文字分享哦" + newsThingInfo.getTitle() + " " + newsThingInfo.getUrl());
             }
         });
-        //设置JPG渐进式清晰度  废流量啊
-//        DraweeController controller = Fresco.newDraweeControllerBuilder()
-//                .setLowResImageRequest(ImageRequest.fromUri(newsThingInfo.getCustom_fields().getThumb_c().get(0)))
-//                .setImageRequest(ImageRequest.fromUri(newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium")))
-//                .setOldController(holder.image_icon.getController())
-//                .build();
-//        holder.image_icon.setController(controller);
-//        if (isSave) {
-//            uri = Uri.parse(newsThingInfo.getCustomFields().getThumb_m().replace("custom", "medium"));
-//        } else {
-//        String url = newsThingInfo.getCustom_fields().getThumb_c().get(0).replace("custom", "medium");
-//        uri = Uri.parse(url);
-//        }
-
-//        holder.image_icon.setImageURI(uri);
-//        ImageLoadUtils.loadImage(context,"",holder.image_icon);
         holder.image_icon.setImageResource(R.drawable.newthings);
     }
 
@@ -133,7 +110,6 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
 
     private void loadDataFromServer() {
         if (NetWorkUtils.isNetWorkConnected(context)) {
-//            isSave = false;
             Logger.e("url:" + NewsThingInfo.URL_FRESH_NEWS + page);
             OkHttpUtils.get().url(NewsThingInfo.URL_FRESH_NEWS + page).build().execute(new StringCallback() {
                 @Override
@@ -166,7 +142,6 @@ public class NewsThingAdapter extends RecyclerView.Adapter<NewsThingAdapter.View
                 }
             });
         } else {
-//            isSave = true;
             if (loadFinishListener != null) {
                 loadFinishListener.finishDataFormServer();
 
